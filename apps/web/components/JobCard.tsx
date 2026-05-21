@@ -17,10 +17,9 @@ const EMP_LABEL: Record<string, string> = {
 }
 
 export default function JobCard({ job }: Props) {
-  const daysLeft = Math.max(
-    0,
-    Math.ceil((new Date(job.deadline).getTime() - Date.now()) / 86_400_000),
-  )
+  const daysLeft = job.deadline
+    ? Math.max(0, Math.ceil((new Date(job.deadline).getTime() - Date.now()) / 86_400_000))
+    : null
 
   return (
     <Link href={`/jobs/${job.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
@@ -151,15 +150,17 @@ export default function JobCard({ job }: Props) {
           >
             {job.company.responseRate}% response rate
           </span>
-          <span
-            style={{
-              fontFamily: 'var(--mono)',
-              fontSize: '0.72rem',
-              color: daysLeft <= 3 ? '#e57373' : 'var(--warm)',
-            }}
-          >
-            {daysLeft === 0 ? 'Closes today' : `${daysLeft}d left`}
-          </span>
+          {daysLeft !== null && (
+            <span
+              style={{
+                fontFamily: 'var(--mono)',
+                fontSize: '0.72rem',
+                color: daysLeft <= 3 ? '#e57373' : 'var(--warm)',
+              }}
+            >
+              {daysLeft === 0 ? 'Closes today' : `${daysLeft}d left`}
+            </span>
+          )}
         </div>
       </article>
     </Link>

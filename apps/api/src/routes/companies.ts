@@ -27,23 +27,30 @@ export async function companyRoutes(app: FastifyInstance) {
       select: {
         id: true, name: true, slug: true, tagline: true,
         description: true, craftStatement: true,
-        logoUrl: true, teamPhotos: true,
+        logoUrl: true, teamPhotos: true, website: true,
         size: true, founded: true, hqLocation: true, socialLinks: true,
-        responseRate: true, avgResponseDays: true, verified: true,
-        createdAt: true,
+        responseRate: true, avgResponseDays: true, totalApplications: true,
+        verified: true, createdAt: true,
         jobs: {
           where:   { status: 'active' },
           orderBy: { createdAt: 'desc' },
           select: {
             id: true, title: true, slug: true,
             salaryMin: true, salaryMax: true, currency: true,
-            locationType: true, employmentType: true, createdAt: true,
+            locationType: true, city: true, employmentType: true,
+            featured: true, deadline: true, createdAt: true,
+            company: {
+              select: {
+                name: true, slug: true, logoUrl: true,
+                verified: true, responseRate: true,
+              },
+            },
           },
         },
       },
     })
 
     if (!company) return reply.status(404).send({ error: 'Company not found' })
-    return reply.send(company)
+    return reply.send({ company })
   })
 }

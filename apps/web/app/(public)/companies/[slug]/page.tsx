@@ -68,9 +68,11 @@ export default async function CompanyPage({ params }: Props) {
                 {company.hqLocation && <Meta>📍 {company.hqLocation}</Meta>}
                 <Meta>👥 {company.size}</Meta>
                 {company.founded && <Meta>🗓 Est. {company.founded}</Meta>}
-                <a href={company.website} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--mono)', fontSize: '0.72rem', color: 'var(--gold)', textDecoration: 'none' }}>
-                  🌐 Website ↗
-                </a>
+                {company.website && (
+                  <a href={company.website} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--mono)', fontSize: '0.72rem', color: 'var(--gold)', textDecoration: 'none' }}>
+                    🌐 Website ↗
+                  </a>
+                )}
               </div>
             </div>
           </div>
