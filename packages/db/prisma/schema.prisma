@@ -1,0 +1,172 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Plans ─────────────────────────────────────────────────────────────────────
+
+model Plan {
+  id                String    @id @default(cuid())
+  name              String
+  priceMonthly      Int
+  maxListings       Int       // -1 = unlimited
+  hasProfile        Boolean   @default(false)
+  hasCvAccess       Boolean   @default(false)
+  hasAnalytics      Boolean   @default(false)
+  hasFeaturedBoost  Boolean   @default(false)
+  companies         Company[]
+  createdAt         DateTime  @default(now())
+
+  @@map("plans")
+}
+
+// ── Companies ─────────────────────────────────────────────────────────────────
+
+model Company {
+  id                   String          @id @default(cuid())
+  name                 String
+  slug                 String          @unique
+  website              String
+  tagline              String?
+  description          String
+  craftStatement       String?
+  logoUrl              String?
+  logoKey              String?
+  teamPhotos           String[]
+  size                 String
+  founded              Int?
+  hqLocation           String?
+  socialLinks          Json?
+  verified             Boolean         @default(false)
+  planId               String?
+  plan                 Plan?           @relation(fields: [planId], references: [id])
+  planStatus           String          @default("trial")
+  trialEndsAt          DateTime?
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  responseRate         Float           @default(100)
+  avgResponseDays      Float           @default(0)
+  totalApplications    Int             @default(0)
+  totalResponded       Int             @default(0)
+  adminNotes           String?
+  jobs                 Job[]
+  users                EmployerUser[]
+  accessRequest        EmployerRequest?
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+
+  @@map("companies")
+}
+
+// ── Employer Access Requests ──────────────────────────────────────────────────
+
+model EmployerRequest {
+  id             String    @id @default(cuid())
+  companyName    String
+  website        String
+  description    String
+  rolesHired     String
+  hiresPerYear   String
+  linkedinUrl    String?
+  contactName    String
+  contactEmail   String
+  status         String    @default("pending")   // pending | approved | rejected
+  adminNotes     String?
+  company        Company?  @relation(fields: [companyId], references: [id])
+  companyId      String?   @unique
+  createdAt      DateTime  @default(now())
+
+  @@map("employer_requests")
+}
+
+// ── Employer Users ────────────────────────────────────────────────────────────
+
+model EmployerUser {
+  id           String    @id @default(cuid())
+  companyId    String
+  company      Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  email        String    @unique
+  passwordHash String
+  role         String    @default("owner")       // owner | member
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@map("employer_users")
+}
+
+// ── Jobs ──────────────────────────────────────────────────────────────────────
+
+model Job {
+  id               String        @id @default(cuid())
+  companyId        String
+  company          Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  title            String
+  slug             String        @unique
+  salaryMin        Int
+  salaryMax        Int
+  currency         String        @default("USD")
+  locationType     String        // remote | hybrid | onsite
+  city             String?
+  employmentType   String        // fulltime | parttime | contract
+  description      String
+  craftDescription String
+  requirements     String
+  benefits         String
+  deadline         DateTime
+  status           String        @default("draft")  // draft | active | filled | paused
+  featured         Boolean       @default(false)
+  applications     Application[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@map("jobs")
+}
+
+// ── Applications ──────────────────────────────────────────────────────────────
+
+model Application {
+  id           String    @id @default(cuid())
+  jobId        String
+  job          Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  name         String
+  email        String
+  cvUrl        String
+  cvKey        String
+  note         String?
+  token        String    @unique @default(cuid())
+  status       String    @default("received")   // received | viewed | responded | hired
+  employerNote String?
+  createdAt    DateTime  @default(now())
+  respondedAt  DateTime?
+
+  @@map("applications")
+}
+
+// ── Job Alerts ────────────────────────────────────────────────────────────────
+
+model JobAlert {
+  id         String   @id @default(cuid())
+  email      String
+  keyword    String?
+  location   String?
+  salaryMin  Int?
+  token      String   @unique @default(cuid())
+  createdAt  DateTime @default(now())
+
+  @@map("job_alerts")
+}
+
+// ── Admin Users ───────────────────────────────────────────────────────────────
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  @@map("admin_users")
+}
