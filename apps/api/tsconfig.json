@@ -4,7 +4,6 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "outDir": "dist",
-    "rootDir": "src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -14,5 +13,5 @@
       "@trovejob/db":    ["../../packages/db/index.ts"]
     }
   },
-  "include": ["src", "../../packages/types", "../../packages/db"]
+  "include": ["src"]
 }

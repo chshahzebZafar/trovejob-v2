@@ -210,7 +210,7 @@ export async function applicationRoutes(app: FastifyInstance) {
     })
     if (!application) return reply.status(404).send({ error: 'Not found' })
 
-    const newStatus = action === 'hired' ? 'hired' : 'responded'
+    const newStatus = 'responded'
 
     await prisma.application.update({
       where: { id },

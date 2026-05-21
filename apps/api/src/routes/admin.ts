@@ -109,6 +109,7 @@ export async function adminRoutes(app: FastifyInstance) {
           slug,
           website:     request.website,
           description: request.description,
+          size:        '',
           verified:    true,
           planStatus:  'trial',
           trialEndsAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // 14-day trial
