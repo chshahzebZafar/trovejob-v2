@@ -46,16 +46,31 @@ export default function Footer() {
           ))}
         </nav>
 
-        <p
-          style={{
-            fontFamily: 'var(--mono)',
-            fontSize: '0.72rem',
-            color: 'var(--warm)',
-            opacity: 0.6,
-          }}
-        >
-          © {new Date().getFullYear()} TroveJob. All rights reserved.
-        </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <p
+            style={{
+              fontFamily: 'var(--mono)',
+              fontSize: '0.72rem',
+              color: 'var(--warm)',
+              opacity: 0.6,
+            }}
+          >
+            © {new Date().getFullYear()} TroveJob. All rights reserved.
+          </p>
+          <Link
+            href="/admin/login"
+            style={{
+              fontFamily: 'var(--mono)',
+              fontSize: '0.65rem',
+              color: 'var(--hairline)',
+              textDecoration: 'none',
+              letterSpacing: '0.04em',
+              opacity: 0.5,
+            }}
+          >
+            Admin
+          </Link>
+        </div>
       </div>
     </footer>
   )

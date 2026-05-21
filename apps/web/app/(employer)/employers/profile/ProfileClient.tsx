@@ -29,7 +29,7 @@ export default function ProfileClient() {
       })
       .catch(err => {
         if (err.message?.includes('401')) router.push('/employers/login')
-        setError(err.message)
+        else setError(err.message)
       })
   }, [router])
 

@@ -13,7 +13,7 @@ async function request<T>(
   })
   if (!res.ok) {
     const body = await res.json().catch(() => ({ message: res.statusText }))
-    throw new Error(body?.message ?? res.statusText)
+    throw new Error(`${res.status} ${body?.message ?? res.statusText}`)
   }
   return res.json() as Promise<T>
 }
@@ -276,6 +276,8 @@ export interface AdminDashboard {
 export const adminApi = {
   login: (data: { email: string; password: string }) =>
     request('/api/admin/login', { method: 'POST', body: JSON.stringify(data) }),
+
+  logout: () => request('/api/admin/logout', { method: 'POST' }),
 
   dashboard: () => request<AdminDashboard>('/api/admin/dashboard'),
 

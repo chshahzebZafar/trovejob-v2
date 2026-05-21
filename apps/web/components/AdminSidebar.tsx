@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { adminApi } from '@/lib/api'
 
 const LINKS = [
   { href: '/admin/dashboard',          label: 'Dashboard',    icon: '◈' },
@@ -14,6 +15,7 @@ const LINKS = [
 
 export default function AdminSidebar() {
   const pathname = usePathname()
+  const router   = useRouter()
 
   // Don't render sidebar on admin login page
   if (pathname === '/admin/login') return null
@@ -77,12 +79,24 @@ export default function AdminSidebar() {
       </nav>
 
       <div style={{ padding: '16px 20px', borderTop: '1px solid var(--hairline)' }}>
-        <Link
-          href="/admin/login"
-          style={{ fontFamily: 'var(--mono)', fontSize: '0.7rem', color: 'var(--warm)', textDecoration: 'none' }}
+        <button
+          onClick={async () => {
+            await adminApi.logout().catch(() => {})
+            router.push('/admin/login')
+          }}
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            fontFamily: 'var(--mono)',
+            fontSize: '0.7rem',
+            color: 'var(--warm)',
+            cursor: 'pointer',
+            letterSpacing: '0.03em',
+          }}
         >
           Sign out
-        </Link>
+        </button>
       </div>
     </aside>
   )

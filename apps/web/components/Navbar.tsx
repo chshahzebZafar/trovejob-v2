@@ -1,10 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { employerApi } from '@/lib/api'
 
 export default function Navbar() {
   const pathname = usePathname()
+  const router   = useRouter()
   const isEmployer = pathname?.startsWith('/employers')
   const isAdmin    = pathname?.startsWith('/admin')
 
@@ -70,11 +72,30 @@ export default function Navbar() {
             </Link>
           </nav>
         ) : (
-          <nav style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-            <NavLink href="/employers/dashboard" label="Dashboard"    active={pathname === '/employers/dashboard'} />
-            <NavLink href="/employers/jobs"       label="Listings"    active={pathname?.startsWith('/employers/jobs') ?? false} />
+          <nav style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
+            <NavLink href="/employers/dashboard"    label="Dashboard" active={pathname === '/employers/dashboard'} />
+            <NavLink href="/employers/jobs"         label="Listings"  active={pathname?.startsWith('/employers/jobs') ?? false} />
             <NavLink href="/employers/applications" label="Inbox"     active={pathname === '/employers/applications'} />
-            <NavLink href="/employers/profile"    label="Profile"     active={pathname === '/employers/profile'} />
+            <NavLink href="/employers/profile"      label="Profile"   active={pathname === '/employers/profile'} />
+            <button
+              onClick={async () => {
+                await employerApi.logout().catch(() => {})
+                router.push('/employers/login')
+              }}
+              style={{
+                fontFamily: 'var(--mono)',
+                fontSize: '0.78rem',
+                color: 'var(--warm)',
+                background: 'none',
+                border: '1px solid var(--hairline)',
+                borderRadius: 40,
+                padding: '5px 14px',
+                cursor: 'pointer',
+                letterSpacing: '0.04em',
+              }}
+            >
+              Sign out
+            </button>
           </nav>
         )}
       </div>
