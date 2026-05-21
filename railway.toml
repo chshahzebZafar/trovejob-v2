@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "npm install --prefix packages/db && npx --prefix packages/db prisma generate && npm install --prefix apps/api"
+buildCommand = "npm install --prefix packages/db && cd packages/db && npx prisma generate && cd ../.. && npm install --prefix apps/api"
 
 [deploy]
 startCommand = "sh -c 'cd apps/api && npx tsx src/index.ts'"
