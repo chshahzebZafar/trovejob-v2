@@ -10,7 +10,7 @@ export default async function CompaniesPage() {
 
   try {
     const res = await companiesApi.list()
-    companies = res.companies
+    companies = res?.companies ?? []
   } catch (e) {
     error = e instanceof Error ? e.message : 'Failed to load companies'
   }

@@ -15,7 +15,7 @@ export async function companyRoutes(app: FastifyInstance) {
         _count: { select: { jobs: { where: { status: 'active' } } } },
       },
     })
-    return reply.send(companies)
+    return reply.send({ companies })
   })
 
   // GET /api/companies/:slug — public profile
