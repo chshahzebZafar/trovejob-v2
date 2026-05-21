@@ -25,7 +25,7 @@ export async function adminRoutes(app: FastifyInstance) {
       { expiresIn: '1d' },
     )
 
-    reply.setCookie('admin_token', token, {
+    reply.setCookie('token', token, {
       httpOnly: true,
       secure:   process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -37,7 +37,7 @@ export async function adminRoutes(app: FastifyInstance) {
   })
 
   app.post('/logout', { preHandler: requireAdmin }, async (_req, reply) => {
-    reply.clearCookie('admin_token', { path: '/api/admin' })
+    reply.clearCookie('token', { path: '/api/admin' })
     return reply.send({ success: true })
   })
 

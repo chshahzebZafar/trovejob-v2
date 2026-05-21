@@ -69,8 +69,8 @@ model EmployerRequest {
   companyName    String
   website        String
   description    String
-  rolesHired     String
-  hiresPerYear   String
+  rolesHired     String?
+  hiresPerYear   String?
   linkedinUrl    String?
   contactName    String
   contactEmail   String
@@ -113,10 +113,10 @@ model Job {
   city             String?
   employmentType   String        // fulltime | parttime | contract
   description      String
-  craftDescription String
-  requirements     String
-  benefits         String
-  deadline         DateTime
+  craftDescription String?
+  requirements     String?
+  benefits         String?
+  deadline         DateTime?
   status           String        @default("draft")  // draft | active | filled | paused
   featured         Boolean       @default(false)
   applications     Application[]

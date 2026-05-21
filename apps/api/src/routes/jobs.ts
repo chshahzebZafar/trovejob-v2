@@ -16,7 +16,10 @@ export async function jobRoutes(app: FastifyInstance) {
 
     const where: any = {
       status: 'active',
-      deadline: { gte: new Date() },
+      OR: [
+        { deadline: null },
+        { deadline: { gte: new Date() } },
+      ],
     }
 
     if (keyword) {
@@ -95,7 +98,7 @@ export async function jobRoutes(app: FastifyInstance) {
         craftDescription:body.craftDescription,
         requirements:    body.requirements,
         benefits:        body.benefits,
-        deadline:        new Date(body.deadline),
+        deadline:        body.deadline ? new Date(body.deadline) : null,
         status:          body.publish ? 'active' : 'draft',
       },
     })
